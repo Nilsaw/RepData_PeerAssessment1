@@ -8,7 +8,7 @@ This assignment makes use of data from a personal activity monitoring device. Th
 * Load the data in the activity_data object.
 
 ```r
-activty_data <- read.csv("repdata-data-activity/activity.csv")
+activty_data <- read.csv("activity/activity.csv")
 ```
 
 ## What is the mean total number of steps taken per day?
@@ -152,9 +152,9 @@ The mean value remains unchanghed, the median value has shifted closer to the me
 ```r
 daytype <- function(date) {
     if (weekdays(as.Date(date)) == "Sunday" || weekdays(as.Date(date)) == "Saturday") {
-        "weekend"
+        "Weekend"
     } else {
-        "weekday"
+        "Weekday"
     }
 }
 activty_data$daytype <- as.factor(sapply(activty_data$date, daytype))
@@ -167,28 +167,14 @@ activty_data$daytype <- as.factor(sapply(activty_data$date, daytype))
 ```r
 par(mfrow = c(2, 1))
 weekday_type <- "Weekday"
-steps_per_type <- aggregate(steps ~ interval, data = activty_data, subset = activty_data$daytype == 
-    weekday_type, FUN = mean)
-```
-
-```
-## Error: no rows to aggregate
-```
-
-```r
-plot(steps_per_type, type = "l", main = weekday_type)
+weekday_data <- subset(activty_data, daytype == weekday_type)
+steps_per_type_Weekday <- aggregate(steps ~ interval, weekday_data, mean)
+plot(steps_per_type_Weekday, type = "l", main = weekday_type)
 
 weekday_type <- "Weekend"
-steps_per_type <- aggregate(steps ~ interval, data = activty_data, subset = activty_data$daytype == 
-    weekday_type, FUN = mean)
-```
-
-```
-## Error: no rows to aggregate
-```
-
-```r
-plot(steps_per_type, type = "l", main = weekday_type)
+weekend_data <- subset(activty_data, daytype == weekday_type)
+steps_per_type_Weekend <- aggregate(steps ~ interval, weekend_data, mean)
+plot(steps_per_type_Weekend, type = "l", main = weekday_type)
 ```
 
 ![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11.png) 
